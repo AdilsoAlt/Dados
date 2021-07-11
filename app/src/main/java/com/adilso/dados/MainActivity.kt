@@ -1,12 +1,15 @@
 package com.adilso.dados
 
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import com.adilso.dados.SettingsActivity.Constantes.NUMERO_DADOS_ATRIBUTO
+import com.adilso.dados.SettingsActivity.Constantes.NUMERO_FACES_ATRIBUTO
 import com.adilso.dados.databinding.ActivityMainBinding
 import kotlin.random.Random
 import kotlin.random.nextInt
@@ -17,14 +20,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var settingsActivityLauncher:ActivityResultLauncher<Intent>
     private var faces: Int = 6;
     private var dados: Int = 1;
+    private lateinit var  configuracoesSharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
-
         gerarRandomico = Random(System.currentTimeMillis())
+
+        configuracoesSharedPreferences = getSharedPreferences(SettingsActivity.Constantes.CONFIGURACOES_ARQUIVO, MODE_PRIVATE)
+        dados = configuracoesSharedPreferences.getInt(NUMERO_DADOS_ATRIBUTO, 1)
+        faces = configuracoesSharedPreferences.getInt(NUMERO_FACES_ATRIBUTO, 6)
 
         activityMainBinding.jogarDadosBt.setOnClickListener{
             if(dados == 1) {
